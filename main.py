@@ -18,19 +18,19 @@ from streamlit_mic_recorder import mic_recorder
 # ---------------------------------------------------------------------------
 # CORE SERVICE LAYER IMPORTS
 # ---------------------------------------------------------------------------
-from services.route_tasks import CognitiveUnderstandingEngine, IntelligenceDrivenRouter
-from services.summarizer import DocumentSummarizerService
-from services.meeting_agent import MeetingIntelligenceService
-from services.chat import ChatService
-from services.finnance import FinanceService
-from services.consensus_engine import MultiAgentDecisionEngine
-from services.proposal_agent import CorporateCommunicationsAgent
-from services.recovery_engine import AutonomousTaskRecoveryEngine
-from services.exec_finance import ExecutiveFinanceService
-from services.admin_analytics import AdminAnalyticsService
-from services.project_manager import ProjectManagerService
-from services.employee_manager import EmployeeManagerService, WorkLocation, LeaveType, RoleEnum
-from services.scheduler import SchedulerService
+from route_tasks import CognitiveUnderstandingEngine, IntelligenceDrivenRouter
+from summarizer import DocumentSummarizerService
+from meeting_agent import MeetingIntelligenceService
+from chat import ChatService
+from finnance import FinanceService
+from consensus_engine import MultiAgentDecisionEngine
+from proposal_agent import CorporateCommunicationsAgent
+from recovery_engine import AutonomousTaskRecoveryEngine
+from exec_finance import ExecutiveFinanceService
+from admin_analytics import AdminAnalyticsService
+from project_manager import ProjectManagerService
+from employee_manager import EmployeeManagerService, WorkLocation, LeaveType, RoleEnum
+from scheduler import SchedulerService
 
 # Configure global application presentation properties
 st.set_page_config(page_title="AIVORA Operating System", layout="wide", page_icon="⚡")

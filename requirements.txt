@@ -10,3 +10,10 @@ seaborn
 google-generativeai
 python-docx
 pypdf
+streamlit
+pandas
+scikit-learn
+openai-whisper
+streamlit-mic-recorder
+apscheduler
+openpyxl

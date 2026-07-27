@@ -21,3 +21,145 @@ python-docx
 pypdf
 python-dotenv
 requests
+# ===========================
+# WEB APPLICATION
+# ===========================
+streamlit>=1.38.0
+gradio>=4.44.0
+fastapi
+uvicorn
+gunicorn
+
+# ===========================
+# DATA SCIENCE
+# ===========================
+numpy
+pandas
+scipy
+scikit-learn
+xgboost
+joblib
+
+# ===========================
+# AI & LLM
+# ===========================
+openai
+google-generativeai
+google-genai
+crewai
+langchain
+langchain-community
+langchain-core
+tiktoken
+
+# ===========================
+# MACHINE LEARNING
+# ===========================
+torch
+torchvision
+torchaudio
+transformers
+sentence-transformers
+accelerate
+safetensors
+
+# ===========================
+# SPEECH
+# ===========================
+openai-whisper
+streamlit-mic-recorder
+SpeechRecognition
+pydub
+
+# ===========================
+# NLP
+# ===========================
+nltk
+spacy
+textblob
+gensim
+networkx
+wordcloud
+
+# ===========================
+# VISUALIZATION
+# ===========================
+matplotlib
+plotly
+altair
+bokeh
+wordcloud
+Pillow
+
+# ===========================
+# DOCUMENTS
+# ===========================
+python-docx
+python-pptx
+pypdf
+pdfplumber
+reportlab
+openpyxl
+xlsxwriter
+
+# ===========================
+# DATABASES
+# ===========================
+sqlalchemy
+psycopg2-binary
+pymysql
+sqlite-utils
+
+# ===========================
+# APIs
+# ===========================
+requests
+httpx
+aiohttp
+python-dotenv
+
+# ===========================
+# EMAIL
+# ===========================
+imapclient
+secure-smtplib
+
+# ===========================
+# SCHEDULER
+# ===========================
+apscheduler
+
+# ===========================
+# FILES
+# ===========================
+python-multipart
+
+# ===========================
+# UTILITIES
+# ===========================
+tqdm
+rich
+colorama
+
+# ===========================
+# SECURITY
+# ===========================
+cryptography
+bcrypt
+PyJWT
+
+# ===========================
+# DATE/TIME
+# ===========================
+python-dateutil
+pytz
+
+# ===========================
+# EXPORTS
+# ===========================
+fpdf2
+
+# ===========================
+# OPTIONAL
+# ===========================
+opencv-python-headless

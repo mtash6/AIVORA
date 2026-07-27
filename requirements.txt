@@ -21,79 +21,70 @@ python-docx
 pypdf
 python-dotenv
 requests
-# ===========================
+# ==========================
 # WEB APPLICATION
-# ===========================
-streamlit>=1.38.0
-gradio>=4.44.0
-fastapi
-uvicorn
-gunicorn
+# ==========================
+streamlit>=1.40.0
+gradio>=5.0.0
 
-# ===========================
-# DATA SCIENCE
-# ===========================
-numpy
-pandas
-scipy
-scikit-learn
-xgboost
-joblib
+# ==========================
+# DATA ANALYSIS
+# ==========================
+numpy>=1.26
+pandas>=2.2
+scipy>=1.13
+scikit-learn>=1.5
+xgboost>=2.1
+joblib>=1.4
 
-# ===========================
+# ==========================
 # AI & LLM
-# ===========================
-openai
-google-generativeai
-google-genai
-crewai
-langchain
-langchain-community
-langchain-core
-tiktoken
+# ==========================
+google-generativeai>=0.8
+google-genai>=1.0.0
+crewai>=0.98.0
+openai>=1.50.0
 
-# ===========================
+# ==========================
 # MACHINE LEARNING
-# ===========================
+# ==========================
 torch
 torchvision
 torchaudio
-transformers
-sentence-transformers
+transformers>=4.46
+sentence-transformers>=3.2
 accelerate
 safetensors
 
-# ===========================
+# ==========================
 # SPEECH
-# ===========================
+# ==========================
 openai-whisper
-streamlit-mic-recorder
 SpeechRecognition
+streamlit-mic-recorder
 pydub
 
-# ===========================
+# ==========================
 # NLP
-# ===========================
-nltk
-spacy
+# ==========================
+nltk>=3.9
+spacy>=3.8
 textblob
 gensim
-networkx
-wordcloud
+networkx>=3.3
+wordcloud>=1.9
 
-# ===========================
+# ==========================
 # VISUALIZATION
-# ===========================
-matplotlib
-plotly
-altair
-bokeh
-wordcloud
-Pillow
+# ==========================
+matplotlib>=3.9
+plotly>=5.24
+altair>=5.4
+Pillow>=10.4
 
-# ===========================
+# ==========================
 # DOCUMENTS
-# ===========================
+# ==========================
 python-docx
 python-pptx
 pypdf
@@ -102,64 +93,62 @@ reportlab
 openpyxl
 xlsxwriter
 
-# ===========================
-# DATABASES
-# ===========================
-sqlalchemy
+# ==========================
+# DATABASE
+# ==========================
+sqlalchemy>=2.0
 psycopg2-binary
 pymysql
-sqlite-utils
 
-# ===========================
-# APIs
-# ===========================
-requests
+# ==========================
+# NETWORKING
+# ==========================
+requests>=2.32
 httpx
 aiohttp
 python-dotenv
 
-# ===========================
+# ==========================
 # EMAIL
-# ===========================
+# ==========================
 imapclient
-secure-smtplib
 
-# ===========================
+# ==========================
 # SCHEDULER
-# ===========================
+# ==========================
 apscheduler
 
-# ===========================
-# FILES
-# ===========================
-python-multipart
-
-# ===========================
-# UTILITIES
-# ===========================
-tqdm
-rich
-colorama
-
-# ===========================
+# ==========================
 # SECURITY
-# ===========================
+# ==========================
 cryptography
 bcrypt
 PyJWT
 
-# ===========================
+# ==========================
+# FILES
+# ==========================
+python-multipart
+
+# ==========================
+# UTILITIES
+# ==========================
+tqdm
+rich
+colorama
+
+# ==========================
 # DATE/TIME
-# ===========================
+# ==========================
 python-dateutil
 pytz
 
-# ===========================
-# EXPORTS
-# ===========================
+# ==========================
+# EXPORT
+# ==========================
 fpdf2
 
-# ===========================
-# OPTIONAL
-# ===========================
+# ==========================
+# COMPUTER VISION
+# ==========================
 opencv-python-headless

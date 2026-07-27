@@ -45,3 +45,15 @@ nltk
 crewai
 google-genai
 google-generativeai
+streamlit
+pandas
+scikit-learn
+openai-whisper
+streamlit-mic-recorder
+apscheduler
+openpyxl
+nltk
+crewai
+google-genai
+google-generativeai
+xgboost

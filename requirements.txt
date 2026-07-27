@@ -34,3 +34,14 @@ apscheduler
 openpyxl
 nltk
 crewai
+streamlit
+pandas
+scikit-learn
+openai-whisper
+streamlit-mic-recorder
+apscheduler
+openpyxl
+nltk
+crewai
+google-genai
+google-generativeai

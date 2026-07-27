@@ -9,9 +9,12 @@
 import os
 import asyncio
 import threading
+import tempfile
+from datetime import datetime
+from dataclasses import asdict
+
 import pandas as pd
 import streamlit as st
-import tempfile
 import whisper
 from streamlit_mic_recorder import mic_recorder
 
@@ -73,7 +76,8 @@ def safe_remove(file_path: str):
             os.remove(file_path)
     except PermissionError:
         pass  # Gracefully swallow OS file locks
-    # --- BACKGROUND AUTOMATION SCHEDULER LIFECYCLE ---
+
+# --- BACKGROUND AUTOMATION SCHEDULER LIFECYCLE ---
 @st.cache_resource
 def initialize_global_scheduler_service():
     """
@@ -103,12 +107,13 @@ app_mode = st.sidebar.radio("Select Active Framework Workspace:", [
     "⚙️ Admin Project Success Control",
     "📋 Project Portfolio Manager",
     "👥 Workforce & Employee Manager",
-    "⏱️ Automated Job Scheduler",  # <-- ADD THIS LINE
+    "⏱️ Automated Job Scheduler",
     "🧠 AI Executive Board",
     "📩 Smart Replies & Proposals"
 ])
 st.sidebar.markdown("---")
 st.sidebar.markdown("### Telemetry Matrix")
+
 # Persistent visual indicators for the automated recovery background stack
 if recovery_engine.is_running:
     st.sidebar.success("⚙️ Recovery Engine: ACTIVE")
@@ -264,7 +269,7 @@ if app_mode == "🏢 Enterprise Hub (Task Routing)":
         st.info("Please upload the Core Dataset file to activate the operational runtime workspace.")
 
 # ---------------------------------------------------------------------------
-# MODULE 2: AI CHAT ASSISTANT (Enriched with Voice and Document Ingestion)
+# MODULE 2: AI CHAT ASSISTANT
 # ---------------------------------------------------------------------------
 elif app_mode == "💬 AI Chat Assistant":
     st.title("💬 AIVORA Chat Assistant")
@@ -274,7 +279,6 @@ elif app_mode == "💬 AI Chat Assistant":
         st.info("🔑 Please enter a valid Gemini API Key in the left sidebar menu to activate the Chat interface.")
         st.stop()
 
-    # Initialize persistent state registers
     if "messages" not in st.session_state:
         st.session_state.messages = []
     if "last_audio_bytes" not in st.session_state:
@@ -282,12 +286,10 @@ elif app_mode == "💬 AI Chat Assistant":
     if "voice_active_prompt" not in st.session_state:
         st.session_state.voice_active_prompt = None
 
-    # Render Historical Conversational Messages
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-    # Asset Control Console Drawer Layout
     with st.expander("🎙️ & 📄 Operational Media Ingestion Drawer", expanded=True):
         col_v, col_d = st.columns(2)
         with col_v:
@@ -306,7 +308,6 @@ elif app_mode == "💬 AI Chat Assistant":
                 key="chat_asset_uploader"
             )
 
-    # Process acoustic frames only when a fresh sequence signature is captured
     if audio and audio["bytes"] != st.session_state.last_audio_bytes:
         st.session_state.last_audio_bytes = audio["bytes"]
         audio_path = None
@@ -330,20 +331,17 @@ elif app_mode == "💬 AI Chat Assistant":
             if audio_path and os.path.exists(audio_path):
                 safe_remove(audio_path)
 
-    # Standardize textual dialogue captures
     text_prompt = st.chat_input("Query enterprise knowledge graphs...")
 
-    # Interface Ingestion Router Coordinator
     prompt = None
     if text_prompt:
         prompt = text_prompt
-        st.session_state.voice_active_prompt = None  # Flush older voice cache queues
+        st.session_state.voice_active_prompt = None
     elif st.session_state.voice_active_prompt:
         prompt = st.session_state.voice_active_prompt
-        st.session_state.voice_active_prompt = None  # Consume frame instant immediately
+        st.session_state.voice_active_prompt = None
 
     if prompt:
-        # Display user input immediately 
         with st.chat_message("user"):
             st.markdown(prompt)
             if chat_asset:
@@ -356,7 +354,6 @@ elif app_mode == "💬 AI Chat Assistant":
 
         with st.spinner("Thinking..."):
             try:
-                # Extract file parameters if an active upload exists
                 f_bytes = chat_asset.getvalue() if chat_asset else None
                 f_type = chat_asset.type if chat_asset else None
 
@@ -480,8 +477,8 @@ elif app_mode == "📄 Document Summarizer":
                     st.markdown("---")
                     
                     st.subheader("✨ Extractive Summary Output")
-                    if Math_summary := results["summary"]:
-                        st.info(Math_summary)
+                    if doc_summary := results["summary"]:
+                        st.info(doc_summary)
                     else:
                         st.warning("Could not assemble condensed vectors from structural context layers.")
                         
@@ -491,23 +488,20 @@ elif app_mode == "📄 Document Summarizer":
             st.warning("⚠️ Processing aborted: Your text input area buffer context length is insufficient.")
 
 # ---------------------------------------------------------------------------
-# MODULE 5: FINANCIAL INTELLIGENCE (ML Forecasting & Auditing Platform)
+# MODULE 5: FINANCIAL INTELLIGENCE
 # ---------------------------------------------------------------------------
 elif app_mode == "💰 Financial Intelligence":
     st.title("💰 AIVORA Financial Intelligence Hub")
     st.markdown("Upload active corporate spreadsheets to calculate real-time runway horizons, predict cash flow velocities, and isolate statistical transaction anomalies.")
 
-    # Initialize the core financial engine service
     fin_service = FinanceService()
 
-    # File Ingestion Engine Pipeline
     uploaded_ledger = st.file_uploader(
         "Upload Corporate Ledger Spreadsheet (CSV or Excel formats):", 
         type=["csv", "xlsx", "xls"]
     )
 
     if uploaded_ledger is not None:
-        # Secure file path resolution for file-system safety
         temp_dir = "outputs"
         os.makedirs(temp_dir, exist_ok=True)
         temp_file_path = os.path.join(temp_dir, f"temp_{uploaded_ledger.name}")
@@ -517,18 +511,15 @@ elif app_mode == "💰 Financial Intelligence":
 
         st.success(f"📁 Source file `{uploaded_ledger.name}` loaded into active engine environment memory.")
         
-        # Trigger the advanced processing engine pipeline
         if st.button("⚡ Run Advanced ML Financial Audit", type="primary"):
             with st.spinner("Executing predictive metrics calculations and parsing transaction risk..."):
                 metrics, chart = fin_service.process_ledger(temp_file_path)
                 
-                # Check for parsing anomalies or exceptions
                 if "error" in metrics:
                     st.error(f"Financial Processing Exception: {metrics['error']}")
                 else:
                     st.markdown("### 📊 Core Operational Financial Indicators")
                     
-                    # Row 1 Indicators Display Layout Dashboard Panels
                     col_rev, col_burn, col_margin = st.columns(3)
                     with col_rev:
                         st.metric("Gross Logged Revenue", f"${metrics['revenue']:,.2f}")
@@ -537,7 +528,6 @@ elif app_mode == "💰 Financial Intelligence":
                     with col_margin:
                         st.metric("Calculated Operational Margin", f"{metrics['margin']:.2f}%")
                         
-                    # Row 2 Advanced Intelligence Features Display Panels
                     st.markdown("---")
                     col_runway, col_anom = st.columns(2)
                     with col_runway:
@@ -548,7 +538,6 @@ elif app_mode == "💰 Financial Intelligence":
                         anomaly_color = "🟢" if metrics['anomaly_count'] == 0 else "🚨"
                         st.metric(f"{anomaly_color} Isolated Anomaly Risk Items", f"{metrics['anomaly_count']} Flagged Rows")
 
-                    # Cross-Module Synergy: Cache results so the AI Executive Board can read them
                     st.session_state.active_financial_summary = {
                         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                         "summary_text": (
@@ -562,19 +551,16 @@ elif app_mode == "💰 Financial Intelligence":
                     }
                     st.toast("📊 Telemetry data successfully shared globally with AIVORA core workspace modules.")
 
-                    # Render the predictive analytical cash projection chart
                     if chart is not None:
                         st.markdown("---")
                         st.markdown("### 📈 Machine Learning Capital Projection Trajectory")
                         st.pyplot(chart)
 
-                    # Render the Statistical Exception Report Panel if anomalies were isolated
                     if not fin_service.anomalies_df.empty:
                         st.markdown("---")
                         st.subheader("🚨 Categorical Variance & Expense Anomaly Audit Logs")
                         st.markdown("The following line items deviate from typical spending patterns in their categories by more than **2.2 standard deviations ($Z$-score)**:")
                         
-                        # Display clean, scannable data grid view for operations teams
                         st.dataframe(
                             fin_service.anomalies_df,
                             use_container_width=True
@@ -583,7 +569,6 @@ elif app_mode == "💰 Financial Intelligence":
                         st.markdown("---")
                         st.success("✅ Financial Risk Assessment Complete: All operational items fall within safe categorical statistical limits.")
                         
-        # Clean up the file system after processing is complete
         try:
             if os.path.exists(temp_file_path):
                 os.remove(temp_file_path)
@@ -606,14 +591,12 @@ elif app_mode == "📊 Executive Financial Dashboard":
             audit = exec_service.analyze_executive_finance()
             kpis = audit["kpis"]
 
-            # Row 1: Executive KPI Panel
             col_h, col_r, col_p, col_f = st.columns(4)
             col_h.metric("Financial Health Score", f"{kpis['health_score']} / 100")
             col_r.metric("Gross Revenue", f"${kpis['gross_revenue']:,.0f}")
             col_p.metric("Net Profit (P&L)", f"${kpis['net_profit']:,.0f}", f"{kpis['profit_margin_pct']:.1f}% Margin")
             col_f.metric("Forecasted Q Revenue", f"${kpis['forecasted_q_revenue']:,.0f}")
 
-            # Row 2: Cash & Burn Indicators
             st.markdown("---")
             col_c, col_b, col_u, col_o = st.columns(4)
             col_c.metric("Cash Reserve", f"${kpis['cash_reserve']:,.0f}")
@@ -621,18 +604,17 @@ elif app_mode == "📊 Executive Financial Dashboard":
             col_u.metric("Budget Utilization", f"{kpis['budget_utilization_pct']:.1f}%")
             col_o.metric("Overdue Payments Risk", f"${kpis['overdue_payments']:,.0f}")
 
-            # Visual Charts Section
             st.markdown("---")
             st.subheader("📈 Executive Visual Intelligence")
             charts = exec_service.generate_executive_charts(audit)
 
             c1, c2 = st.columns(2)
             with c1:
-                st.pyplot(charts[0])  # P&L Trajectory
-                st.pyplot(charts[2])  # Budget Allocation
+                st.pyplot(charts[0])
+                st.pyplot(charts[2])
             with c2:
-                st.pyplot(charts[1])  # Cash Flow Projection
-                st.pyplot(charts[3])  # Outstanding Invoices Donut
+                st.pyplot(charts[1])
+                st.pyplot(charts[3])
 
 # ---------------------------------------------------------------------------
 # MODULE 7: ADMIN PROJECT SUCCESS CONTROL
@@ -647,7 +629,6 @@ elif app_mode == "⚙️ Admin Project Success Control":
         telemetry = admin_service.calculate_admin_telemetry()
         m = telemetry["metrics"]
 
-        # Row 1: Admin Telemetry Summary Metrics
         col1, col2, col3, col4 = st.columns(4)
         col1.metric("Project Success Rate", f"{m['project_success_rate']:.1f}%")
         col2.metric("On-Time SLA Delivery", f"{m['on_time_delivery_rate']:.1f}%")
@@ -660,14 +641,14 @@ elif app_mode == "⚙️ Admin Project Success Control":
 
         ac1, ac2 = st.columns(2)
         with ac1:
-            st.pyplot(admin_charts[0])  # Success Rate Trend
-            st.pyplot(admin_charts[2])  # Recovery Stage Frequency
+            st.pyplot(admin_charts[0])
+            st.pyplot(admin_charts[2])
         with ac2:
-            st.pyplot(admin_charts[1])  # Human vs AI Split
-            st.pyplot(admin_charts[3])  # SLA Latency by Domain
+            st.pyplot(admin_charts[1])
+            st.pyplot(admin_charts[3])
 
 # ---------------------------------------------------------------------------
-# MODULE 8: AI EXECUTIVE BOARD (Multi-Agent Consensus Platform)
+# MODULE 8: AI EXECUTIVE BOARD
 # ---------------------------------------------------------------------------
 elif app_mode == "🧠 AI Executive Board":
     st.title("🧠 AI Executive Board Room")
@@ -687,18 +668,13 @@ elif app_mode == "🧠 AI Executive Board":
         if proposal_input.strip():
             with st.spinner("Convening parallel board meeting frames..."):
                 try:
-                    # Initialize the engine
                     board_engine = MultiAgentDecisionEngine(api_key=effective_api_key)
-                    
-                    # Run the multi-threaded deliberation loop
                     deliberations = board_engine.consult_board(proposal_input)
                     
                     st.success("✅ Executive feedback loops finalized successfully.")
                     st.markdown("---")
                     
-                    # Render outputs side-by-side using Streamlit columns
                     cols = st.columns(3)
-                    
                     for idx, (persona_title, feedback) in enumerate(deliberations.items()):
                         with cols[idx]:
                             st.subheader(persona_title)
@@ -710,7 +686,7 @@ elif app_mode == "🧠 AI Executive Board":
             st.warning("⚠️ Submission aborted: Please input a valid textual scenario proposal to analyze.")
 
 # ---------------------------------------------------------------------------
-# MODULE 9: SMART REPLIES & PROPOSALS (Contextual Content Generator)
+# MODULE 9: SMART REPLIES & PROPOSALS
 # ---------------------------------------------------------------------------
 elif app_mode == "📩 Smart Replies & Proposals":
     st.title("📩 Smart Replies & Operational Proposal Engine")
@@ -746,7 +722,6 @@ elif app_mode == "📩 Smart Replies & Proposals":
         if raw_context_input.strip():
             with st.spinner("Compiling contextual layers into document structure..."):
                 try:
-                    # Execute backend generator pipeline
                     comms_agent = CorporateCommunicationsAgent(api_key=effective_api_key)
                     generated_output = comms_agent.generate_document(
                         raw_context=raw_context_input,
@@ -755,12 +730,9 @@ elif app_mode == "📩 Smart Replies & Proposals":
                     )
                     
                     st.success(f"✅ Formal {selected_doc_type} drafted successfully.")
-                    
-                    # Present the output cleanly inside an isolated block
                     st.markdown("### 📋 Generated Asset Draft")
                     st.info(generated_output)
                     
-                    # Provide an immediate download file action feature
                     file_friendly_name = selected_doc_type.lower().replace(" ", "_")
                     st.download_button(
                         label="💾 Download Document (.md)",
@@ -773,8 +745,9 @@ elif app_mode == "📩 Smart Replies & Proposals":
                     st.error(f"Communications tracking pipeline calculation failed: {str(e)}")
         else:
             st.warning("⚠️ Action Aborted: Please input baseline context notes before triggering generation loops.")
-            # ---------------------------------------------------------------------------
-# MODULE: PROJECT PORTFOLIO MANAGER
+
+# ---------------------------------------------------------------------------
+# MODULE 10: PROJECT PORTFOLIO MANAGER
 # ---------------------------------------------------------------------------
 elif app_mode == "📋 Project Portfolio Manager":
     st.title("📋 Project Portfolio & Task Manager")
@@ -783,7 +756,6 @@ elif app_mode == "📋 Project Portfolio Manager":
     pm_service = ProjectManagerService()
     portfolio_summary = pm_service.get_portfolio_summary()
 
-    # Row 1: Global Portfolio Summary
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("Active Projects", portfolio_summary["total_projects"])
     col2.metric("Total Portfolio Budget", f"${portfolio_summary['total_budget']:,.2f}")
@@ -792,7 +764,6 @@ elif app_mode == "📋 Project Portfolio Manager":
 
     st.markdown("---")
 
-    # Row 2: Selected Project Deep Dive
     project_ids = list(pm_service.projects.keys())
     if not project_ids:
         st.info("No projects active in the system storage.")
@@ -810,7 +781,6 @@ elif app_mode == "📋 Project Portfolio Manager":
             st.subheader(f"📌 {proj_data['title']}")
             st.caption(f"**Client:** {proj_data['client']} | **Owner:** {proj_data['owner']} | **Target Completion:** {proj_data['target_completion']}")
 
-            # Health Metrics Panel
             flag_icon = "🟢" if health["status_flag"] == "GREEN" else ("🟡" if health["status_flag"] == "AMBER" else "🔴")
             
             h_col1, h_col2, h_col3, h_col4 = st.columns(4)
@@ -823,7 +793,6 @@ elif app_mode == "📋 Project Portfolio Manager":
 
             tab_tasks, tab_add_task = st.tabs(["📋 Task Roster", "➕ Add Task"])
 
-            # Tab 1: Task List & Quick Status Update
             with tab_tasks:
                 df_tasks = pm_service.get_project_tasks_dataframe(selected_proj_id)
                 if not df_tasks.empty:
@@ -853,7 +822,6 @@ elif app_mode == "📋 Project Portfolio Manager":
                 else:
                     st.info("No tasks logged for this project yet.")
 
-            # Tab 2: Add New Task Form
             with tab_add_task:
                 st.markdown("#### Register New Task Deliverable")
                 with st.form(key="add_task_form"):
@@ -875,8 +843,9 @@ elif app_mode == "📋 Project Portfolio Manager":
                             st.rerun()
                         else:
                             st.warning("Please fill in both Task Title and Assignee before submitting.")
-                            # ---------------------------------------------------------------------------
-# MODULE: WORKFORCE & EMPLOYEE MANAGER
+
+# ---------------------------------------------------------------------------
+# MODULE 11: WORKFORCE & EMPLOYEE MANAGER
 # ---------------------------------------------------------------------------
 elif app_mode == "👥 Workforce & Employee Manager":
     st.title("👥 Workforce & Employee Management Workspace")
@@ -884,7 +853,6 @@ elif app_mode == "👥 Workforce & Employee Manager":
 
     ems = EmployeeManagerService()
 
-    # --- Top Metric Telemetry Panel ---
     df_rankings = ems.get_employee_rankings_dataframe()
     total_staff = len(ems.employees)
     active_staff = sum(1 for e in ems.employees.values() if e.is_active)
@@ -906,9 +874,6 @@ elif app_mode == "👥 Workforce & Employee Manager":
         "🧠 AI Workforce Predictive Analytics"
     ])
 
-    # -----------------------------------------------------------------------
-    # TAB 1: STAFF DIRECTORY & PROFILES
-    # -----------------------------------------------------------------------
     with tab_dir:
         st.subheader("Enterprise Employee Rankings & Roster")
         if not df_rankings.empty:
@@ -944,7 +909,6 @@ elif app_mode == "👥 Workforce & Employee Manager":
                     st.markdown(f"**Skills:** {', '.join([f'`{s}`' for s in emp.skills]) if emp.skills else 'None logged'}")
                     st.markdown(f"**Certifications:** {', '.join(emp.certifications) if emp.certifications else 'None logged'}")
 
-                # Quick Add Employee Form
                 with st.expander("➕ Register New Employee", expanded=False):
                     with st.form("create_employee_form"):
                         f_name = st.text_input("Full Name")
@@ -962,9 +926,6 @@ elif app_mode == "👥 Workforce & Employee Manager":
                             else:
                                 st.warning("Name and Email are required.")
 
-    # -----------------------------------------------------------------------
-    # TAB 2: ATTENDANCE CLOCK ENGINE
-    # -----------------------------------------------------------------------
     with tab_att:
         st.subheader("Attendance Punch Clock")
         c_clock1, c_clock2 = st.columns(2)
@@ -998,9 +959,6 @@ elif app_mode == "👥 Workforce & Employee Manager":
         else:
             st.info("No attendance records logged for current period.")
 
-    # -----------------------------------------------------------------------
-    # TAB 3: LEAVE APPROVAL QUEUE
-    # -----------------------------------------------------------------------
     with tab_leave:
         col_req, col_queue = st.columns([1, 1])
 
@@ -1051,9 +1009,6 @@ elif app_mode == "👥 Workforce & Employee Manager":
             else:
                 st.info("No pending leave requests in queue.")
 
-    # -----------------------------------------------------------------------
-    # TAB 4: AI WORKFORCE PREDICTIVE ANALYTICS
-    # -----------------------------------------------------------------------
     with tab_ai:
         st.subheader("🤖 AI Workforce Predictive Intelligence")
         st.markdown("Simulate burnout risks, evaluate promotion readiness, and calculate department skill coverage.")
@@ -1063,7 +1018,6 @@ elif app_mode == "👥 Workforce & Employee Manager":
         if target_ai_emp:
             col_b, col_p = st.columns(2)
 
-            # Burnout Analysis Card
             with col_b:
                 burnout_res = ems.predict_burnout(target_ai_emp)
                 st.markdown("#### 🔥 Burnout Risk Predictor")
@@ -1073,7 +1027,6 @@ elif app_mode == "👥 Workforce & Employee Manager":
                 st.caption(f"**Avg Daily Hours:** {burnout_res.get('average_daily_hours', 0.0)} hrs/day")
                 st.info(f"**AI Recommendation:** {burnout_res.get('recommendation', 'N/A')}")
 
-            # Promotion Readiness Card
             with col_p:
                 promo_res = ems.predict_promotion(target_ai_emp)
                 st.markdown("#### 🚀 Promotion Readiness Score")
@@ -1095,14 +1048,14 @@ elif app_mode == "👥 Workforce & Employee Manager":
                 st.warning(f"⚠️ Missing Department Capabilities: {', '.join([f'`{s}`' for s in gap_analysis['missing_skills']])}")
             else:
                 st.success("🎉 Department possesses 100% of required skill benchmarks!")
-                # ---------------------------------------------------------------------------
-# MODULE: AUTOMATED JOB SCHEDULER
+
+# ---------------------------------------------------------------------------
+# MODULE 12: AUTOMATED JOB SCHEDULER
 # ---------------------------------------------------------------------------
 elif app_mode == "⏱️ Automated Job Scheduler":
     st.title("⏱️ Automated Job Scheduler & Task Control")
     st.markdown("Manage automated platform recurring jobs, view job execution telemetry, run system backups, and trigger manual maintenance tasks.")
 
-    # Top Control Bar & Telemetry Status
     col_stat1, col_stat2, col_stat3, col_stat4 = st.columns(4)
     
     active_jobs = scheduler_engine.list_jobs()
@@ -1117,7 +1070,6 @@ elif app_mode == "⏱️ Automated Job Scheduler":
 
     st.markdown("---")
 
-    # Scheduler Engine Controls
     c_ctrl1, c_ctrl2, c_ctrl3, c_ctrl4 = st.columns(4)
     with c_ctrl1:
         if st.button("▶️ Resume Scheduler", use_container_width=True):
@@ -1150,9 +1102,6 @@ elif app_mode == "⏱️ Automated Job Scheduler":
         "➕ Register Custom Job"
     ])
 
-    # -----------------------------------------------------------------------
-    # TAB 1: ACTIVE JOB QUEUE
-    # -----------------------------------------------------------------------
     with tab_jobs:
         st.subheader("Registered System Cron & Interval Jobs")
         if active_jobs:
@@ -1162,9 +1111,6 @@ elif app_mode == "⏱️ Automated Job Scheduler":
         else:
             st.info("No active jobs registered in scheduler.")
 
-    # -----------------------------------------------------------------------
-    # TAB 2: EXECUTION TELEMETRY LOGS
-    # -----------------------------------------------------------------------
     with tab_history:
         st.subheader("Recent Execution Logs & Retry History")
         if exec_history:
@@ -1173,9 +1119,6 @@ elif app_mode == "⏱️ Automated Job Scheduler":
         else:
             st.info("No job execution telemetry logged yet.")
 
-    # -----------------------------------------------------------------------
-    # TAB 3: INSTANT MANUAL TRIGGERS
-    # -----------------------------------------------------------------------
     with tab_manual:
         st.subheader("Run Background Jobs On-Demand")
         
@@ -1198,9 +1141,6 @@ elif app_mode == "⏱️ Automated Job Scheduler":
                 ai_maint_res = scheduler_engine.job_ai_predictive_maintenance()
                 st.json(ai_maint_res)
 
-    # -----------------------------------------------------------------------
-    # TAB 4: REGISTER CUSTOM JOB
-    # -----------------------------------------------------------------------
     with tab_add:
         st.subheader("Register New Interval Job")
         with st.form("add_custom_job_form"):
@@ -1209,7 +1149,6 @@ elif app_mode == "⏱️ Automated Job Scheduler":
             
             if st.form_submit_button("Register Job"):
                 if job_id_input:
-                    # Example binding to cleanup or health function
                     success = scheduler_engine.add_job(
                         scheduler_engine.job_health_monitoring, 
                         trigger_type="interval", 

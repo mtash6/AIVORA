@@ -25,3 +25,12 @@ streamlit-mic-recorder
 apscheduler
 openpyxl
 nltk
+streamlit
+pandas
+scikit-learn
+openai-whisper
+streamlit-mic-recorder
+apscheduler
+openpyxl
+nltk
+crewai
